@@ -18,6 +18,7 @@ public class Practice02ClipPathView extends View {
     Bitmap bitmap;
     Point point1 = new Point(200, 200);
     Point point2 = new Point(600, 200);
+    Path path = new Path();
 
     public Practice02ClipPathView(Context context) {
         super(context);
@@ -39,7 +40,22 @@ public class Practice02ClipPathView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        if (path == null) {
+            path = new Path();
+        }
+        path.reset();
+
+        path.addCircle(point1.x+150,point1.y+150,120f, Path.Direction.CCW);
+        canvas.save();
+        canvas.clipPath(path);
         canvas.drawBitmap(bitmap, point1.x, point1.y, paint);
+        canvas.restore();
+        path.reset();
+        path.setFillType(Path.FillType.INVERSE_WINDING);
+        path.addCircle(point2.x+150,point2.y+150,120, Path.Direction.CW);
+        canvas.save();
+        canvas.clipPath(path);
         canvas.drawBitmap(bitmap, point2.x, point2.y, paint);
+        canvas.restore();
     }
 }
