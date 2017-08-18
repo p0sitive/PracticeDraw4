@@ -73,7 +73,22 @@ public class Practice14FlipboardView extends View {
         int y = centerY - bitmapHeight / 2;
 
         canvas.save();
+        canvas.clipRect(0, 0, centerX << 1, centerY);
+        canvas.drawBitmap(bitmap, x, y, paint);
+        canvas.restore();
 
+        canvas.save();
+
+        /**
+         * 裁切Canvas
+         * 将翻页效果分为上下两部分：上面页面固定，下面的页面x轴旋转
+         * 下面页面在超过90度时，投影效果是在上半部分显示的
+         */
+        if (degree > 90) {
+            canvas.clipRect(0, 0, centerX << 1, centerY);
+        } else {
+            canvas.clipRect(0, centerY, centerX << 1, centerY << 1);
+        }
         camera.save();
         camera.rotateX(degree);
         canvas.translate(centerX, centerY);
